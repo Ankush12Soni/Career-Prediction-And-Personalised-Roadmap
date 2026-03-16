@@ -14,7 +14,8 @@ An AI-powered career guidance system that helps students discover suitable caree
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Train the Model](#train-the-model)
-  - [Run the Server](#run-the-server)
+  - [Run the Streamlit App](#run-the-streamlit-app)
+  - [Run the FastAPI Server](#run-the-fastapi-server)
 - [API Endpoints](#api-endpoints)
   - [Example: Predict Domain](#example-predict-domain)
 - [Machine Learning Pipeline](#machine-learning-pipeline)
@@ -50,6 +51,7 @@ An AI-powered career guidance system that helps students discover suitable caree
 
 ## Tech Stack
 
+- **UI**: [Streamlit](https://streamlit.io/) + [Plotly](https://plotly.com/python/) (interactive charts)
 - **Framework**: [FastAPI](https://fastapi.tiangolo.com/) + [Uvicorn](https://www.uvicorn.org/)
 - **ML**: [PyTorch](https://pytorch.org/) (CareerNet neural network) + [scikit-learn](https://scikit-learn.org/) (preprocessing)
 - **Data**: [Pandas](https://pandas.pydata.org/), [NumPy](https://numpy.org/)
@@ -65,14 +67,17 @@ An AI-powered career guidance system that helps students discover suitable caree
 Career-Prediction-And-Personalised-Roadmap/
 └── career_ai/
     └── backend/
-        ├── app.py                          # FastAPI application & all route definitions
-        ├── main.py                         # Uvicorn entry point
+        ├── app.py                          # Streamlit UI application
+        ├── main.py                         # FastAPI application & all route definitions
         ├── requirements.txt                # Python dependencies
         ├── train_model.py                  # Model training script
         ├── generate_improved_dataset.py    # Synthetic training data generator
         ├── test_examples.py                # End-to-end persona tests
         ├── test_services.py                # Service-level unit tests
         ├── test_accuracy.py                # Model accuracy evaluation
+        │
+        ├── .streamlit/
+        │   └── config.toml                 # Streamlit theme & server configuration
         │
         ├── models/
         │   ├── schemas.py                  # Pydantic request/response schemas
@@ -124,8 +129,8 @@ venv\Scripts\activate         # Windows
 pip install -r requirements.txt
 ```
 
-> **Note:** PyTorch is required but not listed in `requirements.txt` (assumed pre-installed).  
-> Install it separately: `pip install torch` — or follow the [official guide](https://pytorch.org/get-started/locally/).
+> **Note:** PyTorch is now included in `requirements.txt` (`torch>=2.6.0`).
+> If you prefer a GPU build or a different platform-specific wheel, follow the [official guide](https://pytorch.org/get-started/locally/).
 
 ### Train the Model
 
@@ -146,7 +151,24 @@ To regenerate the synthetic training dataset from scratch:
 python generate_improved_dataset.py
 ```
 
-### Run the Server
+### Run the Streamlit App
+
+```bash
+cd career_ai/backend
+streamlit run app.py
+```
+
+The interactive UI will open at `http://localhost:8501` in your browser.
+
+**Deploying to Streamlit Cloud:**
+
+1. Push your repository to GitHub.
+2. Go to [share.streamlit.io](https://share.streamlit.io) and sign in.
+3. Click **New app**, select your repository.
+4. Set the **Main file path** to `career_ai/backend/app.py`.
+5. Click **Deploy**.
+
+### Run the FastAPI Server
 
 ```bash
 uvicorn main:app --reload --port 8000
